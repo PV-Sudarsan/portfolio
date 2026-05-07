@@ -1,71 +1,44 @@
-#!/bin/bash
+from flask import Flask, request
+app = Flask(__name__)
+@app.route("/")
+def login():
+    return """
+    <h2>Login Page</h2>
+    <form action="/set-hidden" method="post">
+        Username: <input type="text" name="userName"><br><br>
+        Password: <input type="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+    """
+@app.route("/set-hidden", methods=["POST"])
+def set_hidden():
+    userName = request.form.get("userName", "").strip()
+    password = request.form.get("password", "").strip()
 
-echo "Enter number of terms:"
-read n
+    if userName == "" or password == "":
+        return "Please enter both username and password.<br><br>" + login()
 
-a=0
-b=1
+    if userName == "sho" and password == "1234":
+        return f"""
+        <h3>Logged in successfully.</h3>
+        <p>Click the button below to see Username and Password values.</p>
 
-echo "Fibonacci Series:"
-echo -n "$a $b "
-
-for (( i=2; i<n; i++ ))
-do
-    c=$((a + b))
-    echo -n "$c "
-    a=$b
-    b=$c
-done
-
-echo
-
-
-
-
-
-
-#include <stdio.h>
-
-int main() {
-    int pages, frames, i, j, page[50], frame[10], flag = 0, page_faults = 0;
-
-    printf("Enter number of pages: ");
-    scanf("%d", &pages);
-
-    printf("Enter page reference string:\n");
-    for(i = 0; i < pages; i++) {
-        scanf("%d", &page[i]);
-    }
-
-    printf("Enter number of frames: ");
-    scanf("%d", &frames);
-
-    for(i = 0; i < frames; i++) {
-        frame[i] = -1;
-    }
-
-    for(i = 0; i < pages; i++) {
-        flag = 0;
-
-        for(j = 0; j < frames; j++) {
-            if(frame[j] == page[i]) {
-                flag = 1;
-                break;
-            }
-        }
-
-        if(flag == 0) {
-            frame[i % frames] = page[i];
-            page_faults++;
-        }
-
-        printf("\nFrame status: ");
-        for(j = 0; j < frames; j++) {
-            printf("%d ", frame[j]);
-        }
-    }
-
-    printf("\nTotal Page Faults = %d\n", page_faults);
-
-    return 0;
-}
+        <form action="/get-hidden" method="post">
+            <input type="hidden" name="userName" value="{userName}">
+            <input type="hidden" name="password" value="{password}">
+            <input type="submit" value="See Values">
+        </form>
+        """
+    return "Wrong username or password.<br><br>" + login()
+@app.route("/get-hidden", methods=["POST"])
+def get_hidden():
+    userName = request.form.get("userName", "")
+    password = request.form.get("password", "")
+    return f"""
+    <h3>Hidden Field Values</h3>
+    Username: {userName}<br><br>
+    Password: {password}
+    """
+if __name__ == "__main__":
+    allow_host = "*"
+    app.run(debug=True, host="0.0.0.0") 
