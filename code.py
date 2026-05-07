@@ -42,3 +42,74 @@ def get_hidden():
 if __name__ == "__main__":
     allow_host = "*"
     app.run(debug=True, host="0.0.0.0") 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from flask import Flask, session, render_template_string
+
+app = Flask(__name__)
+
+# Secret key is required for session handling
+app.secret_key = "my_secret_key"
+
+
+@app.route("/SessionTracker")
+def session_tracker():
+    # Get current visit count from session
+    count = session.get("tracker.count", 0)
+
+    # Increment count
+    count += 1
+
+    # Save updated count in session
+    session["tracker.count"] = count
+
+    html = """
+    <html>
+    <head>
+        <title>SessionTracker</title>
+    </head>
+    <body>
+        <h1>Session Tracking Demo</h1>
+
+        You've visited this page {{ count }}
+        {% if count == 1 %}
+            time.
+        {% else %}
+            times.
+        {% endif %}
+
+        <p></p>
+
+        <h2>Here is your session data:</h2>
+
+        {% for key, value in session_data.items() %}
+            {{ key }}: {{ value }} <br>
+        {% endfor %}
+    </body>
+    </html>
+    """
+
+    return render_template_string(
+        html,
+        count=count,
+        session_data=session
+    )
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
