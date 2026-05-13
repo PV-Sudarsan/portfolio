@@ -1,115 +1,42 @@
-from flask import Flask, request
-app = Flask(__name__)
-@app.route("/")
-def login():
-    return """
-    <h2>Login Page</h2>
-    <form action="/set-hidden" method="post">
-        Username: <input type="text" name="userName"><br><br>
-        Password: <input type="password" name="password"><br><br>
-        <input type="submit" value="Login">
-    </form>
-    """
-@app.route("/set-hidden", methods=["POST"])
-def set_hidden():
-    userName = request.form.get("userName", "").strip()
-    password = request.form.get("password", "").strip()
+import numpy as np
+import matplotlib.pyplot as plt
+x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12])
+b1, b0 = np.polyfit(x, y, 1)
+print(f"b_0 = {b0:.2f}")
+print(f"b_1 = {b1:.2f}")
+plt.scatter(x, y)
+plt.plot(x, b1 * x + b0)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.show()
 
-    if userName == "" or password == "":
-        return "Please enter both username and password.<br><br>" + login()
-
-    if userName == "sho" and password == "1234":
-        return f"""
-        <h3>Logged in successfully.</h3>
-        <p>Click the button below to see Username and Password values.</p>
-
-        <form action="/get-hidden" method="post">
-            <input type="hidden" name="userName" value="{userName}">
-            <input type="hidden" name="password" value="{password}">
-            <input type="submit" value="See Values">
-        </form>
-        """
-    return "Wrong username or password.<br><br>" + login()
-@app.route("/get-hidden", methods=["POST"])
-def get_hidden():
-    userName = request.form.get("userName", "")
-    password = request.form.get("password", "")
-    return f"""
-    <h3>Hidden Field Values</h3>
-    Username: {userName}<br><br>
-    Password: {password}
-    """
-if __name__ == "__main__":
-    allow_host = "*"
-    app.run(debug=True, host="0.0.0.0") 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from flask import Flask, session, render_template_string
-
-app = Flask(__name__)
-
-# Secret key is required for session handling
-app.secret_key = "my_secret_key"
-
-
-@app.route("/SessionTracker")
-def session_tracker():
-    # Get current visit count from session
-    count = session.get("tracker.count", 0)
-
-    # Increment count
-    count += 1
-
-    # Save updated count in session
-    session["tracker.count"] = count
-
-    html = """
-    <html>
-    <head>
-        <title>SessionTracker</title>
-    </head>
-    <body>
-        <h1>Session Tracking Demo</h1>
-
-        You've visited this page {{ count }}
-        {% if count == 1 %}
-            time.
-        {% else %}
-            times.
-        {% endif %}
-
-        <p></p>
-
-        <h2>Here is your session data:</h2>
-
-        {% for key, value in session_data.items() %}
-            {{ key }}: {{ value }} <br>
-        {% endfor %}
-    </body>
-    </html>
-    """
-
-    return render_template_string(
-        html,
-        count=count,
-        session_data=session
-    )
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+import numpy as np 
+import matplotlib.pyplot as plt  
+def estimate_coef(x, y): 
+n = np.size(x)  
+m_x = np.mean(x) 
+m_y = np.mean(y)  
+SS_xy = np.sum(y*x) - n*m_y*m_x 
+SS_xx = np.sum(x*x) - n*m_x*m_x 
+b_1 = SS_xy / SS_xx 
+b_0 = m_y - b_1*m_x  
+return (b_0, b_1)  
+def plot_regression_line(x, y, b):  
+plt.scatter(x, y, color = "m", 
+marker = "o", s = 30) 
+y_pred = b[0] + b[1]*x 
+plt.plot(x, y_pred, color = "g")  
+plt.xlabel('x') 
+plt.ylabel('y') 
+plt.show() 
+def main(): 
+x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) 
+y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12]) 
+b = estimate_coef(x, y) 
+print("Estimated coefficients:\nb_0 = {} \ 
+\nb_1 = {}".format(b[0], b[1]))  
+# plotting regression line 
+plot_regression_line(x, y, b)  
+if __name__ == "__main__": 
+main()
