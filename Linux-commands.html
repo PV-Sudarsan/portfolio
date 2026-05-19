@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux Command Mastery</title>
+
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#0a0c10;
+  --surface:#0f1318;
+  --card:#141920;
+  --border:#1e2530;
+  --accent:#00d4ff;
+  --accent2:#0aff9d;
+  --accent3:#ff6b35;
+  --text:#e2e8f0;
+  --muted:#64748b;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Syne',sans-serif;
+  overflow-x:hidden;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+/* NAVBAR */
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(10,12,16,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;
+  height:60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--accent);
+  font-weight:700;
+  font-size:1rem;
+}
+
+.nav-links{
+  display:flex;
+  list-style:none;
+  gap:15px;
+}
+
+.nav-links a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:0.8rem;
+  transition:0.2s;
+}
+
+.nav-links a:hover{
+  color:var(--accent);
+}
+
+/* HERO */
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:2rem;
+}
+
+.hero h1{
+  font-size:5rem;
+  line-height:1;
+  font-weight:800;
+}
+
+.hero h1 span{
+  color:var(--accent);
+}
+
+.hero p{
+  color:var(--muted);
+  margin-top:1.5rem;
+  max-width:650px;
+  line-height:1.7;
+}
+
+.hero-buttons{
+  margin-top:2rem;
+  display:flex;
+  gap:1rem;
+}
+
+.btn{
+  padding:0.8rem 1.5rem;
+  border-radius:8px;
+  text-decoration:none;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.85rem;
+  transition:0.2s;
+}
+
+.btn-primary{
+  background:var(--accent);
+  color:black;
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+}
+
+.btn-outline{
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.btn-outline:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+/* TERMINAL */
+
+.terminal{
+  width:min(850px,90vw);
+  margin-top:3rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.term-top{
+  background:var(--card);
+  padding:12px;
+  display:flex;
+  gap:8px;
+  border-bottom:1px solid var(--border);
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+}
+
+.red{background:#ff5f57;}
+.yellow{background:#febc2e;}
+.green{background:#28c840;}
+
+.term-body{
+  padding:1.5rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.85rem;
+  line-height:1.8;
+}
+
+.prompt{
+  color:var(--accent2);
+}
+
+.command{
+  color:var(--accent);
+}
+
+.output{
+  color:var(--muted);
+  margin-left:1rem;
+}
+
+/* SECTIONS */
+
+section{
+  padding:5rem 2rem;
+}
+
+.section-header{
+  text-align:center;
+  margin-bottom:3rem;
+}
+
+.section-header h2{
+  font-size:3rem;
+}
+
+.section-header p{
+  color:var(--muted);
+  margin-top:1rem;
+}
+
+/* COMMAND CATEGORY */
+
+.command-layout{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:250px 1fr;
+  gap:2rem;
+}
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  position:sticky;
+  top:80px;
+}
+
+.sidebar button{
+  background:var(--card);
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:0.8rem;
+  border-radius:8px;
+  cursor:pointer;
+  text-align:left;
+  transition:0.2s;
+}
+
+.sidebar button:hover,
+.sidebar button.active{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+.panel{
+  display:none;
+}
+
+.panel.active{
+  display:block;
+}
+
+.command-list{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+}
+
+.command-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.command-code{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--accent2);
+  font-size:0.85rem;
+}
+
+.command-desc{
+  color:var(--muted);
+  margin-top:0.4rem;
+  font-size:0.82rem;
+}
+
+.copy-btn{
+  background:var(--border);
+  border:none;
+  color:white;
+  padding:0.5rem 0.8rem;
+  border-radius:6px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.copy-btn:hover{
+  background:var(--accent);
+  color:black;
+}
+
+/* CHEATSHEET */
+
+.cheatsheet-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:1.5rem;
+}
+
+.cheat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.cheat-head{
+  background:var(--surface);
+  padding:1rem;
+  border-bottom:1px solid var(--border);
+  color:var(--accent);
+  font-weight:700;
+}
+
+.cheat-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.cheat-table td{
+  padding:0.8rem 1rem;
+  border-bottom:1px solid var(--border);
+}
+
+.cheat-table td:first-child{
+  color:var(--accent2);
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* FOOTER */
+
+footer{
+  border-top:1px solid var(--border);
+  padding:2rem;
+  text-align:center;
+  color:var(--muted);
+  font-family:'JetBrains Mono',monospace;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .command-layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    position:static;
+    flex-direction:row;
+    flex-wrap:wrap;
+  }
+
+  .hero h1{
+    font-size:3rem;
+  }
+
+  .nav-links{
+    display:none;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav>
+  <div class="logo">🐧 Linux.learn</div>
+
+  <ul class="nav-links">
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <h1>Master <span>Linux</span><br>Commands</h1>
+
+  <p>
+    Learn essential Linux commands for system administration, networking,
+    files, permissions, monitoring, package management, and cybersecurity.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="#commands" class="btn btn-primary">Start Learning</a>
+    <a href="#cheatsheet" class="btn btn-outline">Quick Cheatsheet</a>
+  </div>
+
+  <div class="terminal">
+    <div class="term-top">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+
+    <div class="term-body">
+      <div><span class="prompt">root@linux:~$</span> <span class="command">ls -la</span></div>
+      <div class="output">drwxr-xr-x Documents</div>
+      <div class="output">drwxr-xr-x Downloads</div>
+
+      <br>
+
+      <div><span class="prompt">root@linux:~$</span> <span class="command">systemctl status nginx</span></div>
+      <div class="output">● nginx.service - active (running)</div>
+
+      <br>
+
+      <div><span class="prompt">root@linux:~$</span> <span class="command">top</span></div>
+      <div class="output">CPU Usage: 12% | Memory Usage: 43%</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- COMMANDS -->
+
+<section id="commands">
+
+  <div class="section-header">
+    <h2>Linux Commands</h2>
+    <p>Every important Linux command category.</p>
+  </div>
+
+  <div class="command-layout">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+      <button class="active" onclick="showPanel('files',this)">📁 File Commands</button>
+
+      <button onclick="showPanel('permissions',this)">🔐 Permissions</button>
+
+      <button onclick="showPanel('network',this)">🌐 Networking</button>
+
+      <button onclick="showPanel('process',this)">⚙️ Process</button>
+
+      <button onclick="showPanel('system',this)">🖥️ System</button>
+
+      <button onclick="showPanel('package',this)">📦 Package</button>
+
+      <button onclick="showPanel('disk',this)">💾 Disk</button>
+
+      <button onclick="showPanel('users',this)">👤 Users</button>
+
+      <button onclick="showPanel('security',this)">🛡️ Security</button>
+
+    </div>
+
+    <!-- PANELS -->
+
+    <div>
+
+      <!-- FILE COMMANDS -->
+
+      <div class="panel active" id="files">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">ls -la</div>
+              <div class="command-desc">List all files with permissions</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('ls -la')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">cd /var/www</div>
+              <div class="command-desc">Change directory</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('cd /var/www')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">pwd</div>
+              <div class="command-desc">Show current directory</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('pwd')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">cp file1 file2</div>
+              <div class="command-desc">Copy file</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('cp file1 file2')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">mv file1 file2</div>
+              <div class="command-desc">Move or rename file</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('mv file1 file2')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PERMISSIONS -->
+
+      <div class="panel" id="permissions">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">chmod 755 file</div>
+              <div class="command-desc">Change permissions</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('chmod 755 file')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">chown user:user file</div>
+              <div class="command-desc">Change ownership</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('chown user:user file')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">umask</div>
+              <div class="command-desc">Default permissions</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('umask')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- NETWORK -->
+
+      <div class="panel" id="network">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">ping google.com</div>
+              <div class="command-desc">Check connectivity</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('ping google.com')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">ifconfig</div>
+              <div class="command-desc">Show IP configuration</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('ifconfig')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">netstat -tulnp</div>
+              <div class="command-desc">Show listening ports</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('netstat -tulnp')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PROCESS -->
+
+      <div class="panel" id="process">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">top</div>
+              <div class="command-desc">Real-time process monitoring</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('top')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">ps aux</div>
+              <div class="command-desc">List running processes</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('ps aux')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">kill -9 PID</div>
+              <div class="command-desc">Kill process</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('kill -9 PID')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- SYSTEM -->
+
+      <div class="panel" id="system">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">uname -a</div>
+              <div class="command-desc">System information</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('uname -a')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">uptime</div>
+              <div class="command-desc">System uptime</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('uptime')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">systemctl status nginx</div>
+              <div class="command-desc">Service status</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('systemctl status nginx')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- PACKAGE -->
+
+      <div class="panel" id="package">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">apt update</div>
+              <div class="command-desc">Update packages</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('apt update')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">apt install nginx</div>
+              <div class="command-desc">Install package</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('apt install nginx')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">yum install httpd</div>
+              <div class="command-desc">Install package using yum</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('yum install httpd')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- DISK -->
+
+      <div class="panel" id="disk">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">df -h</div>
+              <div class="command-desc">Disk usage</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('df -h')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">du -sh *</div>
+              <div class="command-desc">Folder sizes</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('du -sh *')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- USERS -->
+
+      <div class="panel" id="users">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">useradd test</div>
+              <div class="command-desc">Add user</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('useradd test')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">passwd test</div>
+              <div class="command-desc">Set password</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('passwd test')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- SECURITY -->
+
+      <div class="panel" id="security">
+
+        <div class="command-list">
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">ufw status</div>
+              <div class="command-desc">Firewall status</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('ufw status')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">iptables -L</div>
+              <div class="command-desc">View firewall rules</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('iptables -L')">Copy</button>
+          </div>
+
+          <div class="command-item">
+            <div>
+              <div class="command-code">fail2ban-client status</div>
+              <div class="command-desc">Fail2Ban status</div>
+            </div>
+            <button class="copy-btn" onclick="copyCommand('fail2ban-client status')">Copy</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CHEATSHEET -->
+
+<section id="cheatsheet">
+
+  <div class="section-header">
+    <h2>Linux Cheatsheet</h2>
+    <p>Quick reference for daily Linux usage.</p>
+  </div>
+
+  <div class="cheatsheet-grid">
+
+    <div class="cheat-card">
+      <div class="cheat-head">📁 File Commands</div>
+
+      <table class="cheat-table">
+        <tr><td>ls</td><td>List files</td></tr>
+        <tr><td>pwd</td><td>Current path</td></tr>
+        <tr><td>mkdir</td><td>Create directory</td></tr>
+        <tr><td>rm -rf</td><td>Remove directory</td></tr>
+      </table>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-head">🌐 Networking</div>
+
+      <table class="cheat-table">
+        <tr><td>ping</td><td>Test network</td></tr>
+        <tr><td>curl</td><td>Fetch URL</td></tr>
+        <tr><td>ssh</td><td>Remote login</td></tr>
+        <tr><td>scp</td><td>Copy remote file</td></tr>
+      </table>
+    </div>
+
+    <div class="cheat-card">
+      <div class="cheat-head">⚙️ Process</div>
+
+      <table class="cheat-table">
+        <tr><td>top</td><td>Live monitoring</td></tr>
+        <tr><td>htop</td><td>Advanced monitoring</td></tr>
+        <tr><td>kill</td><td>Kill process</td></tr>
+        <tr><td>jobs</td><td>Background jobs</td></tr>
+      </table>
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+  🐧 Linux.learn — Learn Linux Commands Like a Pro
+</footer>
+
+<script>
+
+function showPanel(id,btn){
+
+  document.querySelectorAll('.panel').forEach(panel=>{
+    panel.classList.remove('active');
+  });
+
+  document.querySelectorAll('.sidebar button').forEach(button=>{
+    button.classList.remove('active');
+  });
+
+  document.getElementById(id).classList.add('active');
+
+  btn.classList.add('active');
+}
+
+function copyCommand(cmd){
+
+  navigator.clipboard.writeText(cmd);
+
+  alert("Copied: " + cmd);
+}
+
+</script>
+
+</body>
+</html>
