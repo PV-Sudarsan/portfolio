@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker — Learn by Doing</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #0f1318;
+    --card: #141920;
+    --border: #1e2530;
+    --accent: #00d4ff;
+    --accent2: #0aff9d;
+    --accent3: #ff6b35;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --dim: #334155;
+    --whale: #00d4ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,12,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .whale-icon {
+    font-size: 1.4rem;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: block;
+    padding: 0.35rem 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); background: rgba(0,212,255,0.07); }
+
+  .nav-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(0,212,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 4px 14px;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.6;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    animation: fadeDown 0.6s 0.3s ease both;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,212,255,0.35);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.7rem 1.8rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 4rem;
+    animation: fadeDown 0.6s 0.4s ease both;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* ANIMATED TERMINAL */
+  .terminal-demo {
+    margin-top: 3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: min(680px, 90vw);
+    overflow: hidden;
+    animation: fadeDown 0.6s 0.5s ease both;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,255,0.1);
+  }
+
+  .term-bar {
+    background: var(--card);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .term-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+
+  .term-body {
+    padding: 1.2rem 1.4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    min-height: 140px;
+  }
+
+  .term-line { display: flex; align-items: flex-start; gap: 8px; }
+  .prompt { color: var(--accent2); }
+  .cmd { color: var(--text); }
+  .output { color: var(--muted); padding-left: 1rem; }
+  .highlight { color: var(--accent); }
+  .success { color: var(--accent2); }
+  .warn { color: var(--accent3); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .section-header p {
+    color: var(--muted);
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* CONCEPTS */
+  #concepts { padding: 5rem 2rem; }
+
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .concept-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .concept-card:hover::before { transform: scaleX(1); }
+  .concept-card:hover { border-color: var(--card-accent, var(--accent)); transform: translateY(-3px); }
+
+  .concept-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .concept-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .concept-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+
+  .concept-card .c-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0,212,255,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0,212,255,0.2);
+  }
+
+  /* COMMANDS SECTION */
+  #commands { padding: 5rem 2rem; background: linear-gradient(to bottom, transparent, rgba(0,212,255,0.02), transparent); }
+
+  .commands-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .cmd-tabs {
+    position: sticky;
+    top: 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cmd-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    background: none;
+    text-align: left;
+    width: 100%;
+  }
+
+  .cmd-tab:hover { color: var(--text); background: var(--card); }
+  .cmd-tab.active { color: var(--accent); background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.2); }
+
+  .cmd-tab-icon { font-size: 1rem; }
+
+  .cmd-panel { display: none; }
+  .cmd-panel.active { display: block; }
+
+  .cmd-panel h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .cmd-panel > p {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .cmd-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .cmd-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+    transition: border-color 0.2s;
+  }
+
+  .cmd-item:hover { border-color: var(--accent); }
+
+  .cmd-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent2);
+    margin-bottom: 0.3rem;
+  }
+
+  .cmd-desc { color: var(--muted); font-size: 0.8rem; }
+
+  .copy-btn {
+    background: var(--border);
+    border: none;
+    color: var(--muted);
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover { background: var(--accent); color: #000; }
+  .copy-btn.copied { background: var(--accent2); color: #000; }
+
+  /* DOCKERFILE SECTION */
+  #dockerfile { padding: 5rem 2rem; }
+
+  .dockerfile-layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .df-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .df-header {
+    padding: 0.85rem 1.2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    padding: 1.4rem;
+    overflow-x: auto;
+    color: var(--text);
+  }
+
+  .kw { color: var(--accent); font-weight: 600; }
+  .str { color: var(--accent2); }
+  .cm { color: var(--muted); }
+
+  .instructions-list {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .instr-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .instr-row:hover { background: var(--surface); }
+
+  .instr-kw {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 80px;
+    padding-top: 1px;
+  }
+
+  .instr-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* QUIZ */
+  #quiz { padding: 5rem 2rem; }
+
+  .quiz-container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+
+  .quiz-progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .qp-dot {
+    flex: 1;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .qp-dot.done { background: var(--accent2); }
+  .qp-dot.active { background: var(--accent); }
+
+  .quiz-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .quiz-q {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .quiz-opts { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .quiz-opt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text);
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .quiz-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--accent2); background: rgba(10,255,157,0.08); color: var(--accent2); }
+  .quiz-opt.wrong { border-color: var(--accent3); background: rgba(255,107,53,0.08); color: var(--accent3); }
+
+  .opt-letter {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .quiz-feedback {
+    margin-top: 1.2rem;
+    padding: 0.85rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(10,255,157,0.08); border: 1px solid rgba(10,255,157,0.2); color: var(--accent2); }
+  .quiz-feedback.err { background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2); color: var(--accent3); }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .quiz-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* CHEATSHEET */
+  #cheatsheet { padding: 5rem 2rem; background: linear-gradient(to bottom, transparent, rgba(10,255,157,0.02), transparent); }
+
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cheat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .cheat-head {
+    padding: 0.75rem 1.2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cheat-table { width: 100%; border-collapse: collapse; }
+  .cheat-table tr { border-bottom: 1px solid var(--border); }
+  .cheat-table tr:last-child { border-bottom: none; }
+  .cheat-table td {
+    padding: 0.65rem 1.2rem;
+    font-size: 0.8rem;
+    vertical-align: middle;
+  }
+
+  .cheat-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent2);
+    width: 55%;
+    word-break: break-all;
+  }
+
+  .cheat-table td:last-child { color: var(--muted); }
+
+  /* ARCHITECTURE */
+  #architecture { padding: 5rem 2rem; }
+
+  .arch-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2.5rem;
+  }
+
+  .arch-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .arch-row {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .arch-box {
+    flex: 1;
+    padding: 1.2rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid;
+  }
+
+  .arch-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .arch-box p { font-size: 0.75rem; color: var(--muted); }
+
+  .arch-box.client { border-color: rgba(0,212,255,0.4); background: rgba(0,212,255,0.06); }
+  .arch-box.daemon { border-color: rgba(10,255,157,0.4); background: rgba(10,255,157,0.06); }
+  .arch-box.registry { border-color: rgba(255,107,53,0.4); background: rgba(255,107,53,0.06); }
+  .arch-box.img { border-color: rgba(0,212,255,0.2); background: rgba(0,212,255,0.03); }
+  .arch-box.ctr { border-color: rgba(10,255,157,0.2); background: rgba(10,255,157,0.03); }
+  .arch-box.vol { border-color: rgba(255,107,53,0.2); background: rgba(255,107,53,0.03); }
+
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 1.2rem;
+    padding: 0.5rem;
+  }
+
+  .arch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  footer span { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .commands-layout { grid-template-columns: 1fr; }
+    .cmd-tabs { flex-direction: row; flex-wrap: wrap; position: static; }
+    .dockerfile-layout { grid-template-columns: 1fr; }
+    .arch-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="whale-icon">🐳</span> DOCKER<span style="color:var(--muted)">.learn</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#concepts">Concepts</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#dockerfile">Dockerfile</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#cheatsheet">Cheatsheet</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+  <span class="nav-badge">v27.x</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-tag">LEARN DOCKER FROM ZERO</div>
+  <h1>Ship Code,<br><span>Not Excuses</span></h1>
+  <p class="hero-sub">Master containerization with hands-on commands, visual architecture, and an interactive quiz.</p>
+  <div class="hero-actions">
+    <a href="#concepts" class="btn-primary">Start Learning →</a>
+    <a href="#cheatsheet" class="btn-outline">Cheatsheet</a>
+  </div>
+
+  <div class="terminal-demo">
+    <div class="term-bar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span class="term-title">terminal — bash</span>
+    </div>
+    <div class="term-body" id="termBody">
+      <div class="term-line"><span class="prompt">$</span><span class="cmd" id="termCmd"></span><span class="cursor"></span></div>
+      <div id="termOut"></div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Modules</div></div>
+    <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Commands</div></div>
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">Quiz Questions</div></div>
+  </div>
+</section>
+
+<!-- CONCEPTS -->
+<section id="concepts">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 01</div>
+    <h2>Core Concepts</h2>
+    <p>The building blocks you must understand before writing a single command.</p>
+  </div>
+  <div class="concepts-grid">
+    <div class="concept-card fade-in" style="--card-accent: #00d4ff">
+      <div class="concept-icon">📦</div>
+      <h3>Container</h3>
+      <p>A lightweight, isolated environment that packages your app with all its dependencies. Containers share the host OS kernel but run in isolation — faster than VMs, more consistent than bare metal.</p>
+      <span class="c-tag">docker run</span>
+    </div>
+    <div class="concept-card fade-in" style="--card-accent: #0aff9d">
+      <div class="concept-icon">🖼️</div>
+      <h3>Image</h3>
+      <p>A read-only template used to create containers. Images are built in layers — each instruction in a Dockerfile adds a new layer. Layers are cached and reused for fast builds.</p>
+      <span class="c-tag">docker build</span>
+    </div>
+    <div class="concept-card fade-in" style="--card-accent: #ff6b35">
+      <div class="concept-icon">📋</div>
+      <h3>Dockerfile</h3>
+      <p>A text file with instructions to build an image. FROM sets the base, RUN executes commands, COPY adds files, and CMD defines the default process that runs inside the container.</p>
+      <span class="c-tag">docker build -t</span>
+    </div>
+    <div class="concept-card fade-in" style="--card-accent: #a855f7">
+      <div class="concept-icon">🗄️</div>
+      <h3>Volume</h3>
+      <p>Persistent storage that survives container restarts and deletions. Data written to volumes is stored on the host filesystem and can be shared between multiple containers.</p>
+      <span class="c-tag">docker volume</span>
+    </div>
+    <div class="concept-card fade-in" style="--card-accent: #f59e0b">
+      <div class="concept-icon">🌐</div>
+      <h3>Network</h3>
+      <p>Virtual networks that allow containers to communicate. Bridge networks are default for single-host. Overlay networks span multiple Docker hosts in a swarm cluster.</p>
+      <span class="c-tag">docker network</span>
+    </div>
+    <div class="concept-card fade-in" style="--card-accent: #ec4899">
+      <div class="concept-icon">🏗️</div>
+      <h3>Docker Compose</h3>
+      <p>A tool for defining and running multi-container apps using a YAML file. Define services, networks, and volumes in one place — spin up your entire stack with one command.</p>
+      <span class="c-tag">docker compose up</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMMANDS -->
+<section id="commands">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 02</div>
+    <h2>Essential Commands</h2>
+    <p>Click any command to copy it to your clipboard.</p>
+  </div>
+  <div class="commands-layout">
+    <div class="cmd-tabs" id="cmdTabs">
+      <button class="cmd-tab active" data-panel="containers" onclick="switchTab(this,'containers')"><span class="cmd-tab-icon">📦</span> Containers</button>
+      <button class="cmd-tab" data-panel="images" onclick="switchTab(this,'images')"><span class="cmd-tab-icon">🖼️</span> Images</button>
+      <button class="cmd-tab" data-panel="volumes" onclick="switchTab(this,'volumes')"><span class="cmd-tab-icon">🗄️</span> Volumes</button>
+      <button class="cmd-tab" data-panel="networks" onclick="switchTab(this,'networks')"><span class="cmd-tab-icon">🌐</span> Networks</button>
+      <button class="cmd-tab" data-panel="compose" onclick="switchTab(this,'compose')"><span class="cmd-tab-icon">🏗️</span> Compose</button>
+      <button class="cmd-tab" data-panel="system" onclick="switchTab(this,'system')"><span class="cmd-tab-icon">⚙️</span> System</button>
+    </div>
+    <div>
+      <!-- CONTAINERS -->
+      <div class="cmd-panel active" id="panel-containers">
+        <h3>Container Commands</h3>
+        <p>Create, run, inspect, and manage the lifecycle of containers.</p>
+        <div class="cmd-list" id="list-containers"></div>
+      </div>
+      <!-- IMAGES -->
+      <div class="cmd-panel" id="panel-images">
+        <h3>Image Commands</h3>
+        <p>Build, pull, push, tag, and manage Docker images.</p>
+        <div class="cmd-list" id="list-images"></div>
+      </div>
+      <!-- VOLUMES -->
+      <div class="cmd-panel" id="panel-volumes">
+        <h3>Volume Commands</h3>
+        <p>Manage persistent storage for containers.</p>
+        <div class="cmd-list" id="list-volumes"></div>
+      </div>
+      <!-- NETWORKS -->
+      <div class="cmd-panel" id="panel-networks">
+        <h3>Network Commands</h3>
+        <p>Create and manage Docker networks for container communication.</p>
+        <div class="cmd-list" id="list-networks"></div>
+      </div>
+      <!-- COMPOSE -->
+      <div class="cmd-panel" id="panel-compose">
+        <h3>Docker Compose</h3>
+        <p>Manage multi-container applications with a YAML file.</p>
+        <div class="cmd-list" id="list-compose"></div>
+      </div>
+      <!-- SYSTEM -->
+      <div class="cmd-panel" id="panel-system">
+        <h3>System Commands</h3>
+        <p>Monitor resources and clean up unused Docker objects.</p>
+        <div class="cmd-list" id="list-system"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCKERFILE -->
+<section id="dockerfile">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 03</div>
+    <h2>Dockerfile Guide</h2>
+    <p>Anatomy of a production-ready Dockerfile.</p>
+  </div>
+  <div class="dockerfile-layout fade-in">
+    <div class="df-card">
+      <div class="df-header">📄 Dockerfile — Node.js App</div>
+      <pre id="dockerfileCode"></pre>
+    </div>
+    <div class="df-card">
+      <div class="df-header">📚 Instructions Reference</div>
+      <div class="instructions-list" id="instrList"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 04</div>
+    <h2>Docker Architecture</h2>
+    <p>How the Docker client, daemon, and registry work together.</p>
+  </div>
+  <div class="arch-container fade-in">
+    <div class="arch-diagram">
+      <div class="arch-row">
+        <div class="arch-box client">
+          <h4 style="color:var(--accent)">🖥️ Docker Client</h4>
+          <p>CLI / REST API<br><code style="font-family:monospace;font-size:0.7rem">docker run, build, push…</code></p>
+        </div>
+        <div class="arch-arrow">⟺</div>
+        <div class="arch-box daemon">
+          <h4 style="color:var(--accent2)">⚙️ Docker Daemon</h4>
+          <p>dockerd — manages images, containers, networks & volumes</p>
+        </div>
+        <div class="arch-arrow">⟺</div>
+        <div class="arch-box registry">
+          <h4 style="color:var(--accent3)">☁️ Registry</h4>
+          <p>Docker Hub / ECR / GCR<br>Stores & distributes images</p>
+        </div>
+      </div>
+      <div class="arch-label">Client ↔ Daemon (Unix socket / TCP) &nbsp;|&nbsp; Daemon ↔ Registry (HTTPS)</div>
+      <div style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+        <div class="arch-label" style="margin-bottom:1rem">Objects managed by the Daemon</div>
+        <div class="arch-row">
+          <div class="arch-box img">
+            <h4>🖼️ Images</h4>
+            <p>Read-only layered templates</p>
+          </div>
+          <div class="arch-box ctr">
+            <h4>📦 Containers</h4>
+            <p>Running instances of images</p>
+          </div>
+          <div class="arch-box vol">
+            <h4>🗄️ Volumes</h4>
+            <p>Persistent data storage</p>
+          </div>
+          <div class="arch-box" style="border-color:rgba(168,85,247,0.3);background:rgba(168,85,247,0.04)">
+            <h4>🌐 Networks</h4>
+            <p>Container communication</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEATSHEET -->
+<section id="cheatsheet">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 05</div>
+    <h2>Quick Cheatsheet</h2>
+    <p>The most-used flags and patterns at a glance.</p>
+  </div>
+  <div class="cheat-grid fade-in" id="cheatGrid"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-header fade-in">
+    <div class="section-tag">Module 06</div>
+    <h2>Test Your Knowledge</h2>
+    <p>10 questions to see how much you've absorbed.</p>
+  </div>
+  <div class="quiz-container fade-in">
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-progress" id="quizProgress"></div>
+      <div class="quiz-num" id="quizNum"></div>
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav">
+        <span class="quiz-score" id="quizScore">Score: 0 / 0</span>
+        <button class="btn-primary" id="quizNext" style="display:none" onclick="nextQuestion()">Next →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>🐳 DOCKER.learn</span> — Built for developers learning containerization
+</footer>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const commandData = {
+  containers: [
+    { cmd: "docker run -d -p 8080:80 nginx", desc: "Run nginx in background, map port 8080→80" },
+    { cmd: "docker run -it ubuntu bash", desc: "Start Ubuntu container with interactive shell" },
+    { cmd: "docker run --name myapp --rm node:20 node -e 'console.log(\"hi\")'", desc: "Named, auto-remove container" },
+    { cmd: "docker ps", desc: "List running containers" },
+    { cmd: "docker ps -a", desc: "List all containers (including stopped)" },
+    { cmd: "docker stop <container>", desc: "Gracefully stop a container (SIGTERM)" },
+    { cmd: "docker rm <container>", desc: "Remove a stopped container" },
+    { cmd: "docker rm -f <container>", desc: "Force remove a running container" },
+    { cmd: "docker exec -it <container> bash", desc: "Open an interactive shell in a running container" },
+    { cmd: "docker logs -f <container>", desc: "Follow/tail container logs in real time" },
+    { cmd: "docker inspect <container>", desc: "Show detailed container info as JSON" },
+    { cmd: "docker stats", desc: "Live CPU, memory, and I/O stats for all containers" },
+    { cmd: "docker cp ./file.txt <container>:/app/", desc: "Copy a file from host into a container" },
+  ],
+  images: [
+    { cmd: "docker build -t myapp:1.0 .", desc: "Build image from Dockerfile in current directory" },
+    { cmd: "docker build --no-cache -t myapp .", desc: "Build without using cache layers" },
+    { cmd: "docker pull node:20-alpine", desc: "Download an image from Docker Hub" },
+    { cmd: "docker push username/myapp:1.0", desc: "Push image to Docker Hub" },
+    { cmd: "docker images", desc: "List all local images" },
+    { cmd: "docker rmi <image>", desc: "Remove a local image" },
+    { cmd: "docker tag myapp:1.0 username/myapp:1.0", desc: "Tag an image for a registry" },
+    { cmd: "docker history <image>", desc: "Show image layer history and sizes" },
+    { cmd: "docker save -o app.tar myapp:1.0", desc: "Export image to a .tar archive" },
+    { cmd: "docker load -i app.tar", desc: "Import image from a .tar archive" },
+  ],
+  volumes: [
+    { cmd: "docker volume create mydata", desc: "Create a named volume" },
+    { cmd: "docker run -v mydata:/app/data nginx", desc: "Mount a named volume into a container" },
+    { cmd: "docker run -v $(pwd):/app node:20", desc: "Bind mount current directory into container" },
+    { cmd: "docker volume ls", desc: "List all volumes" },
+    { cmd: "docker volume inspect mydata", desc: "Show volume details (mountpoint, etc.)" },
+    { cmd: "docker volume rm mydata", desc: "Remove a volume (must not be in use)" },
+    { cmd: "docker volume prune", desc: "Remove all unused volumes" },
+  ],
+  networks: [
+    { cmd: "docker network create mynet", desc: "Create a custom bridge network" },
+    { cmd: "docker run --network mynet nginx", desc: "Connect a container to a network" },
+    { cmd: "docker network ls", desc: "List all networks" },
+    { cmd: "docker network inspect mynet", desc: "Show network details and connected containers" },
+    { cmd: "docker network connect mynet <container>", desc: "Connect running container to a network" },
+    { cmd: "docker network disconnect mynet <container>", desc: "Disconnect container from network" },
+    { cmd: "docker network rm mynet", desc: "Remove a network" },
+    { cmd: "docker network prune", desc: "Remove all unused networks" },
+  ],
+  compose: [
+    { cmd: "docker compose up -d", desc: "Start all services in detached mode" },
+    { cmd: "docker compose up --build", desc: "Rebuild images before starting" },
+    { cmd: "docker compose down", desc: "Stop and remove containers, networks" },
+    { cmd: "docker compose down -v", desc: "Also remove volumes on shutdown" },
+    { cmd: "docker compose ps", desc: "Show status of services" },
+    { cmd: "docker compose logs -f", desc: "Follow logs from all services" },
+    { cmd: "docker compose exec web bash", desc: "Shell into the 'web' service container" },
+    { cmd: "docker compose build", desc: "Build (or rebuild) images only" },
+    { cmd: "docker compose restart <service>", desc: "Restart a specific service" },
+    { cmd: "docker compose config", desc: "Validate and view merged compose config" },
+  ],
+  system: [
+    { cmd: "docker system df", desc: "Show disk usage by images, containers, volumes" },
+    { cmd: "docker system prune", desc: "Remove all stopped containers, unused networks/images" },
+    { cmd: "docker system prune -a", desc: "Also remove all unused images (not just dangling)" },
+    { cmd: "docker image prune -a", desc: "Remove all unused images" },
+    { cmd: "docker container prune", desc: "Remove all stopped containers" },
+    { cmd: "docker builder prune", desc: "Clear the build cache" },
+    { cmd: "docker system info", desc: "Display system-wide Docker information" },
+    { cmd: "docker version", desc: "Show Docker client and server versions" },
+  ]
+};
+
+const quizData = [
+  { q: "Which command runs a container in the background (detached)?", opts: ["docker run -it", "docker run -d", "docker start -b", "docker run --bg"], ans: 1, exp: "The -d flag runs the container in detached (background) mode. The process runs but doesn't attach to your terminal." },
+  { q: "What does a Dockerfile's FROM instruction do?", opts: ["Copies files into the image", "Sets the working directory", "Specifies the base image", "Exposes a network port"], ans: 2, exp: "FROM sets the base image. Every Dockerfile must start with FROM (or ARG before FROM). E.g., FROM node:20-alpine." },
+  { q: "Which command shows ONLY currently running containers?", opts: ["docker ps -a", "docker ps", "docker container ls --all", "docker images"], ans: 1, exp: "docker ps (without -a) shows only running containers. Add -a to see all including stopped ones." },
+  { q: "How do you persist data beyond a container's lifetime?", opts: ["Use ENV variables", "Use a Docker Volume", "Use a COPY instruction", "Use --persist flag"], ans: 1, exp: "Volumes are the recommended way to persist data. They live on the host filesystem and survive container removal." },
+  { q: "What file does 'docker compose up' look for by default?", opts: ["docker-compose.yaml or compose.yaml", "Dockerfile", "docker.config.json", ".dockerenv"], ans: 0, exp: "Docker Compose looks for docker-compose.yaml (legacy) or compose.yaml (modern). Both are supported." },
+  { q: "Which command opens an interactive shell in a running container?", opts: ["docker attach myapp", "docker run -it myapp bash", "docker exec -it myapp bash", "docker shell myapp"], ans: 2, exp: "docker exec -it runs a new process (bash) inside an already-running container. docker attach connects to the main process." },
+  { q: "What does the -p 8080:80 flag do in docker run?", opts: ["Exposes port 80 in the Dockerfile", "Maps host port 8080 to container port 80", "Maps container port 8080 to host port 80", "Opens both ports 8080 and 80"], ans: 1, exp: "Format is host:container. So -p 8080:80 means: requests to localhost:8080 on your machine go to port 80 inside the container." },
+  { q: "Which Dockerfile instruction sets the command to run when a container starts?", opts: ["RUN", "ENTRYPOINT", "CMD", "START"], ans: 2, exp: "CMD provides the default command. It can be overridden at runtime. ENTRYPOINT is similar but harder to override — they're often used together." },
+  { q: "What does 'docker system prune -a' remove?", opts: ["Only stopped containers", "Stopped containers and dangling images", "Everything unused: containers, networks, all unused images, build cache", "Only the build cache"], ans: 2, exp: "With -a, prune removes all unused resources: stopped containers, unused networks, ALL unused images (not just dangling), and build cache." },
+  { q: "In Docker networking, which network type allows containers on different hosts to communicate?", opts: ["Bridge", "Host", "Overlay", "None"], ans: 2, exp: "Overlay networks span multiple Docker hosts and are used in Docker Swarm. Bridge networks are for single-host container communication." }
+];
+
+const cheatData = [
+  { title: "🚀 Run Flags", icon: "🚀", rows: [
+    ["-d", "Detached (background)"],
+    ["-it", "Interactive + TTY"],
+    ["--rm", "Auto-remove on exit"],
+    ["-p host:ctr", "Port mapping"],
+    ["-v src:dst", "Volume / bind mount"],
+    ["-e KEY=VAL", "Environment variable"],
+    ["--name foo", "Set container name"],
+    ["--network net", "Attach to network"],
+    ["--restart always", "Auto-restart policy"],
+    ["-u user", "Run as specific user"],
+  ]},
+  { title: "🏷️ Image Tags", icon: "🏷️", rows: [
+    ["latest", "Default tag if none specified"],
+    ["alpine", "Tiny Linux (~5MB)"],
+    ["slim", "Reduced Debian image"],
+    ["node:20-alpine", "Node 20 on Alpine"],
+    ["python:3.12-slim", "Python 3.12 Slim"],
+    ["nginx:1.25", "Specific Nginx version"],
+    ["ubuntu:22.04", "Ubuntu LTS"],
+    ["scratch", "Empty base image"],
+  ]},
+  { title: "📋 Dockerfile Keywords", icon: "📋", rows: [
+    ["FROM", "Base image"],
+    ["RUN", "Execute command in layer"],
+    ["COPY / ADD", "Add files to image"],
+    ["WORKDIR", "Set working directory"],
+    ["ENV", "Set env variable"],
+    ["EXPOSE", "Document port (hint only)"],
+    ["CMD", "Default container command"],
+    ["ENTRYPOINT", "Fixed container entrypoint"],
+    ["ARG", "Build-time variable"],
+    ["VOLUME", "Declare mount point"],
+  ]},
+  { title: "🧹 Cleanup Shortcuts", icon: "🧹", rows: [
+    ["docker rm $(docker ps -aq)", "Remove all stopped containers"],
+    ["docker rmi $(docker images -q)", "Remove all images"],
+    ["docker system prune -a", "Full cleanup"],
+    ["docker volume prune", "Remove unused volumes"],
+    ["docker builder prune", "Clear build cache"],
+  ]},
+];
+
+// ─── TERMINAL DEMO ───────────────────────────────────────────────────────────
+
+const demos = [
+  {
+    cmd: "docker pull node:20-alpine",
+    out: [
+      '<span class="highlight">20-alpine</span>: Pulling from library/node',
+      'Digest: sha256:abc123...',
+      'Status: Downloaded newer image for <span class="success">node:20-alpine</span>',
+    ]
+  },
+  {
+    cmd: "docker run -d -p 3000:3000 --name myapp node:20-alpine",
+    out: ['<span class="success">a3f8d1c9e4b2...</span>']
+  },
+  {
+    cmd: "docker ps",
+    out: [
+      '<span class="highlight">CONTAINER ID   IMAGE            STATUS         PORTS</span>',
+      '<span class="success">a3f8d1c9</span>       node:20-alpine   Up 2 seconds   <span class="accent">0.0.0.0:3000->3000/tcp</span>',
+    ]
+  },
+  {
+    cmd: "docker build -t myapp:1.0 .",
+    out: [
+      '<span class="highlight">[+] Building 4.2s (8/8) FINISHED</span>',
+      ' => [base 1/3] FROM node:20-alpine          <span class="success">CACHED</span>',
+      ' => [build 2/3] COPY package*.json ./        <span class="success">DONE</span>',
+      ' => [build 3/3] RUN npm ci --only=prod       <span class="success">DONE</span>',
+      ' => exporting to image                        <span class="success">DONE</span>',
+    ]
+  },
+];
+
+let demoIdx = 0;
+
+function typeCmd(text, cb) {
+  const el = document.getElementById('termCmd');
+  el.textContent = '';
+  let i = 0;
+  const t = setInterval(() => {
+    el.textContent += text[i++];
+    if (i >= text.length) { clearInterval(t); cb && setTimeout(cb, 300); }
+  }, 40);
+}
+
+function showOutput(lines, cb) {
+  const out = document.getElementById('termOut');
+  out.innerHTML = '';
+  lines.forEach((l, i) => {
+    setTimeout(() => {
+      const d = document.createElement('div');
+      d.className = 'output';
+      d.innerHTML = l;
+      out.appendChild(d);
+      if (i === lines.length - 1) cb && setTimeout(cb, 1800);
+    }, i * 150);
+  });
+}
+
+function runDemo() {
+  const d = demos[demoIdx % demos.length];
+  demoIdx++;
+  typeCmd(d.cmd, () => showOutput(d.out, runDemo));
+}
+
+runDemo();
+
+// ─── COMMANDS ────────────────────────────────────────────────────────────────
+
+function buildCommandLists() {
+  Object.entries(commandData).forEach(([key, items]) => {
+    const el = document.getElementById(`list-${key}`);
+    if (!el) return;
+    el.innerHTML = items.map(item => `
+      <div class="cmd-item">
+        <div>
+          <div class="cmd-code">${escHtml(item.cmd)}</div>
+          <div class="cmd-desc">${escHtml(item.desc)}</div>
+        </div>
+        <button class="copy-btn" onclick="copyCmd(this, '${item.cmd.replace(/'/g,"\\'")}')">copy</button>
+      </div>
+    `).join('');
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function switchTab(btn, panel) {
+  document.querySelectorAll('.cmd-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.cmd-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`panel-${panel}`).classList.add('active');
+}
+
+function copyCmd(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// ─── DOCKERFILE ──────────────────────────────────────────────────────────────
+
+function buildDockerfile() {
+  const code = document.getElementById('dockerfileCode');
+  code.innerHTML = `<span class="cm"># ── Stage 1: Build ───────────────────────────────</span>
+<span class="kw">FROM</span> <span class="str">node:20-alpine</span> <span class="kw">AS</span> builder
+<span class="kw">WORKDIR</span> <span class="str">/app</span>
+
+<span class="cm"># Copy dependency manifests first (cache optimization)</span>
+<span class="kw">COPY</span> package*.json ./
+<span class="kw">RUN</span> npm ci --only=production
+
+<span class="cm"># Copy source code</span>
+<span class="kw">COPY</span> . .
+<span class="kw">RUN</span> npm run build
+
+<span class="cm"># ── Stage 2: Production ──────────────────────────</span>
+<span class="kw">FROM</span> <span class="str">node:20-alpine</span>
+<span class="kw">WORKDIR</span> <span class="str">/app</span>
+
+<span class="kw">ENV</span> NODE_ENV=production
+
+<span class="cm"># Copy only production artifacts</span>
+<span class="kw">COPY</span> --from=builder /app/dist ./dist
+<span class="kw">COPY</span> --from=builder /app/node_modules ./node_modules
+
+<span class="kw">EXPOSE</span> <span class="str">3000</span>
+
+<span class="cm"># Healthcheck</span>
+<span class="kw">HEALTHCHECK</span> --interval=30s CMD wget -qO- localhost:3000/health
+
+<span class="kw">CMD</span> <span class="str">["node", "dist/index.js"]</span>`;
+
+  const instrs = [
+    ["FROM", "Sets the base image for the build"],
+    ["WORKDIR", "Sets the working directory for subsequent instructions"],
+    ["COPY", "Copies files from build context into the image"],
+    ["ADD", "Like COPY but also handles URLs and .tar extraction"],
+    ["RUN", "Executes a command and commits the result as a new layer"],
+    ["ENV", "Sets environment variables available at runtime"],
+    ["EXPOSE", "Documents which port the container listens on"],
+    ["HEALTHCHECK", "Defines how Docker checks if the container is healthy"],
+    ["ARG", "Defines build-time variables (not available at runtime)"],
+    ["CMD", "Default command run when container starts (overridable)"],
+    ["ENTRYPOINT", "Fixed entrypoint; CMD args are appended to it"],
+    ["VOLUME", "Declares a mountpoint for persistent data"],
+    ["USER", "Sets the user for subsequent RUN / CMD / ENTRYPOINT"],
+  ];
+
+  document.getElementById('instrList').innerHTML = instrs.map(([kw, d]) =>
+    `<div class="instr-row"><span class="instr-kw">${kw}</span><span class="instr-desc">${d}</span></div>`
+  ).join('');
+}
+
+// ─── CHEATSHEET ───────────────────────────────────────────────────────────────
+
+function buildCheatsheet() {
+  document.getElementById('cheatGrid').innerHTML = cheatData.map(card => `
+    <div class="cheat-card">
+      <div class="cheat-head">${card.title}</div>
+      <table class="cheat-table">
+        ${card.rows.map(([c,d]) => `<tr><td>${escHtml(c)}</td><td>${escHtml(d)}</td></tr>`).join('')}
+      </table>
+    </div>
+  `).join('');
+}
+
+// ─── QUIZ ────────────────────────────────────────────────────────────────────
+
+let qIdx = 0, score = 0, answered = false;
+
+function buildQuizProgress() {
+  document.getElementById('quizProgress').innerHTML = quizData.map((_, i) =>
+    `<div class="qp-dot ${i < qIdx ? 'done' : i === qIdx ? 'active' : ''}"></div>`
+  ).join('');
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = quizData[qIdx];
+  document.getElementById('quizNum').textContent = `Question ${qIdx + 1} of ${quizData.length}`;
+  document.getElementById('quizQ').textContent = q.q;
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('quizNext').style.display = 'none';
+  buildQuizProgress();
+
+  const letters = ['A', 'B', 'C', 'D'];
+  document.getElementById('quizOpts').innerHTML = q.opts.map((o, i) => `
+    <button class="quiz-opt" onclick="answer(this, ${i})">
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${escHtml(o)}</span>
+    </button>
+  `).join('');
+
+  document.getElementById('quizScore').textContent = `Score: ${score} / ${qIdx}`;
+}
+
+function answer(btn, i) {
+  if (answered) return;
+  answered = true;
+  const q = quizData[qIdx];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach(b => b.disabled = true);
+  if (i === q.ans) {
+    score++;
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+  }
+  const fb = document.getElementById('quizFeedback');
+  fb.textContent = q.exp;
+  fb.className = `quiz-feedback show ${i === q.ans ? 'ok' : 'err'}`;
+  document.getElementById('quizScore').textContent = `Score: ${score} / ${qIdx + 1}`;
+  document.getElementById('quizNext').style.display = 'block';
+  document.getElementById('quizNext').textContent = qIdx + 1 < quizData.length ? 'Next →' : 'See Results →';
+}
+
+function nextQuestion() {
+  qIdx++;
+  if (qIdx >= quizData.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  const pct = Math.round(score / quizData.length * 100);
+  const grade = pct >= 80 ? '🏆 Excellent!' : pct >= 60 ? '👍 Good job!' : '📚 Keep Learning!';
+  document.getElementById('quizCard').innerHTML = `
+    <div style="text-align:center;padding:2rem 1rem">
+      <div style="font-size:4rem;margin-bottom:1rem">${pct >= 80 ? '🏆' : pct >= 60 ? '🎯' : '📚'}</div>
+      <h2 style="font-size:2rem;font-weight:800;margin-bottom:0.5rem">${grade}</h2>
+      <p style="color:var(--muted);margin-bottom:1.5rem">You scored <span style="color:var(--accent);font-family:monospace;font-size:1.2rem;font-weight:700">${score}/${quizData.length}</span> (${pct}%)</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.5rem;font-family:monospace;font-size:0.85rem;color:var(--muted)">
+        ${pct >= 80 ? 'You have a solid grasp of Docker fundamentals. Try building a real project!' : pct >= 60 ? 'Good foundation! Review the commands and concepts you missed.' : 'Go back through the modules and revisit the concepts — you\'ll get there!'}
+      </div>
+      <button class="btn-primary" onclick="restartQuiz()">Try Again</button>
+    </div>
+  `;
+}
+
+function restartQuiz() {
+  qIdx = 0; score = 0;
+  document.getElementById('quizCard').innerHTML = `
+    <div class="quiz-progress" id="quizProgress"></div>
+    <div class="quiz-num" id="quizNum"></div>
+    <div class="quiz-q" id="quizQ"></div>
+    <div class="quiz-opts" id="quizOpts"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-nav">
+      <span class="quiz-score" id="quizScore">Score: 0 / 0</span>
+      <button class="btn-primary" id="quizNext" style="display:none" onclick="nextQuestion()">Next →</button>
+    </div>
+  `;
+  renderQuestion();
+}
+
+// ─── INTERSECTION OBSERVER ───────────────────────────────────────────────────
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+
+buildCommandLists();
+buildDockerfile();
+buildCheatsheet();
+renderQuestion();
+</script>
+</body>
+</html>
