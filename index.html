@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sudarsan P — Multi-Cloud, DevOps & SOC Engineer</title>
+<title>Sudarsan P — Multi-Cloud, DevOps & Linux Engineer</title>
 <meta
   name="description"
-  content="Sudarsan Palaniappan portfolio covering Multi-Cloud engineering, DevOps, Linux administration, cybersecurity, and SOC operations."
+  content="Sudarsan Palaniappan portfolio covering Multi-Cloud engineering, DevOps, Linux administration, and cybersecurity."
 >
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -980,8 +980,7 @@
   .project-card::before,
   .cert-card::before,
   .achievement-card::before,
-  .contact-card::before,
-  .siem-showcase::after{
+  .contact-card::before{
     content:'';
     position:absolute;
     inset:0;
@@ -994,8 +993,7 @@
   .project-card:hover::before,
   .cert-card:hover::before,
   .achievement-card:hover::before,
-  .contact-card:hover::before,
-  .siem-showcase:hover::after{
+  .contact-card:hover::before{
     transform:translateX(130%);
   }
   .skill-icon{font-size:2rem;margin-bottom:16px;}
@@ -1237,58 +1235,7 @@
     0%,100%{text-shadow:0 0 14px rgba(0,229,255,0.06);}
     50%{text-shadow:0 0 24px rgba(0,229,255,0.18);}
   }
-  .siem-showcase{
-    border:1px solid var(--border);padding:40px;
-    background:var(--surface2);margin-top:40px;
-    position:relative;overflow:hidden;
-  }
-  .siem-showcase::before{
-    content:'ACTIVE PROJECT';
-    position:absolute;top:16px;right:24px;
-    font-size:0.6rem;letter-spacing:0.2em;color:var(--orange);
-    border:1px solid rgba(255,107,53,0.3);padding:4px 10px;
-  }
-  .siem-flow{
-    display:flex;align-items:center;justify-content:center;
-    gap:20px;flex-wrap:wrap;margin:32px 0;
-  }
-  .siem-node{
-    padding:16px 24px;border:1px solid var(--border);
-    background:var(--bg);text-align:center;min-width:140px;
-    transition:all 0.3s;
-  }
-  .siem-node:hover{
-    transform:translateY(-3px) scale(1.02);
-    box-shadow:0 10px 24px rgba(0,229,255,0.08);
-  }
-  .siem-node.from{border-color:rgba(255,51,102,0.3);}
-  .siem-node.to{border-color:rgba(0,255,136,0.3);}
-  .siem-node-label{font-size:0.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;}
-  .siem-node-name{
-    font-family:'Syne',sans-serif;font-weight:700;
-    font-size:0.9rem;margin-top:4px;
-  }
-  .siem-node.from .siem-node-name{color:var(--red);}
-  .siem-node.to .siem-node-name{color:var(--green);}
-  .siem-arrow{font-size:1.5rem;color:var(--cyan);animation:arrowPulse 1.5s infinite;}
-  @keyframes arrowPulse{0%,100%{opacity:0.3;transform:translateX(0)}50%{opacity:1;transform:translateX(4px)}}
-  .siem-metrics{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;
-    margin-top:24px;
-  }
-  .siem-metric{
-    padding:20px;background:var(--bg);border:1px solid var(--border);text-align:center;
-    transition:transform 0.3s, border-color 0.3s;
-  }
-  .siem-metric:hover{
-    transform:translateY(-3px);
-    border-color:rgba(0,229,255,0.3);
-  }
-  .siem-metric-val{
-    font-family:'Syne',sans-serif;font-weight:800;
-    font-size:2rem;color:var(--cyan);
-  }
-  .siem-metric-key{font-size:0.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;margin-top:4px;}
+
   @media(max-width:1200px){
     nav{
       padding:18px 32px;
@@ -1440,8 +1387,7 @@
     .skill-card,
     .cert-card,
     .achievement-card,
-    .contact-card,
-    .siem-showcase{
+    .contact-card{
       padding:24px;
     }
     .portfolio-chooser{
@@ -1503,7 +1449,6 @@
       padding:24px 20px;
       text-align:center;
     }
-    .siem-flow{flex-direction:column;}
     .divider{margin:0 20px;}
   }
   @media(max-width:480px){
@@ -1649,7 +1594,7 @@
   <div class="hero-orb hero-orb2"></div>
 
   <div class="hero-content">
-    <div class="hero-tag">Multi-Cloud &bull; DevOps &bull; Linux &bull; SOC</div>
+    <div class="hero-tag">Multi-Cloud &bull; DevOps &bull; Linux &bull; Cybersecurity</div>
     <h1 class="hero-name">
       <span class="line1">SUDARSAN</span>
       <span class="line2">PALANIAPPAN</span>
@@ -1661,8 +1606,8 @@
       </div>
     </div>
     <p class="hero-summary">
-      Multi-Cloud, Linux &amp; SOC Engineer specializing in secure infrastructure,
-      DevOps automation, and SIEM operations. AWS Certified with 40+ deployments
+      Multi-Cloud, Linux &amp; DevOps Engineer specializing in secure infrastructure,
+      automation, and cloud-native deployments. AWS Certified with 40+ deployments
       across Multi-Cloud and on-premises environments.
     </p>
     <div class="hero-ctas">
@@ -1679,16 +1624,16 @@
       </div>
       <div class="terminal-body">
         <div><span class="t-prompt">sudarsan@Multi-Cloud:~$ </span><span class="t-cmd">whoami --verbose</span></div>
-        <div class="t-out">→ Multi-Cloud &amp; DevOps Engineer | SOC Specialist</div>
+        <div class="t-out">→ Multi-Cloud &amp; DevOps Engineer | Linux Specialist</div>
         <div class="t-out">→ AWS Certified Multi-Cloud Practitioner <span class="t-highlight">[Score: 1000/1000]</span></div>
-        <div class="t-out">→ 40+ Multi-Cloud Deployments | SIEM Migration Expert</div>
+        <div class="t-out">→ 40+ Multi-Cloud Deployments | CI/CD &amp; IaC Expert</div>
         <br>
         <div><span class="t-prompt">sudarsan@Multi-Cloud:~$ </span><span class="t-cmd">cat current_project.txt</span></div>
-        <div class="t-out">→ SolarWinds SEM → Microsoft Sentinel SIEM Migration</div>
-        <div class="t-out">→ ~500 endpoints integrated | False positives ↓</div>
+        <div class="t-out">→ AWS Infrastructure Automation with Terraform &amp; Jenkins</div>
+        <div class="t-out">→ Containerized deployments on ECS | Nginx + TLS hardening</div>
         <br>
         <div><span class="t-prompt">sudarsan@Multi-Cloud:~$ </span><span class="t-cmd">status --open-to-work</span></div>
-        <div class="t-out" style="color:var(--green)">→ <span style="color:var(--green)">AVAILABLE</span> for Multi-Cloud / DevOps / SOC roles</div>
+        <div class="t-out" style="color:var(--green)">→ <span style="color:var(--green)">AVAILABLE</span> for Multi-Cloud / DevOps / Linux roles</div>
         <div><span class="t-prompt">sudarsan@Multi-Cloud:~$ </span><span class="cursor-blink"></span></div>
       </div>
     </div>
@@ -1724,19 +1669,19 @@
   <div class="about-grid">
     <div class="about-panel">
       <p class="about-copy">
-        I am <strong>Sudarsan Palaniappan</strong>, a Multi-Cloud, DevOps, Linux, and SOC engineer focused on building secure infrastructure that is practical to operate.
-        My work combines cloud deployment, server hardening, CI/CD automation, SIEM onboarding, and incident-driven thinking so environments stay both reliable and defensible.
+        I am <strong>Sudarsan Palaniappan</strong>, a Multi-Cloud, DevOps, and Linux engineer focused on building secure infrastructure that is practical to operate.
+        My work combines cloud deployment, server hardening, CI/CD automation, and infrastructure-as-code so environments stay both reliable and scalable.
       </p>
       <ul class="about-points">
         <li>Design and maintain AWS and Linux environments with an emphasis on automation, uptime, and clean operational workflows.</li>
-        <li>Translate SOC and security requirements into usable detections, onboarding standards, alert tuning, and response runbooks.</li>
-        <li>Prefer delivery that is measurable: faster deployments, clearer observability, fewer false positives, and better day-2 operations.</li>
+        <li>Translate infrastructure requirements into repeatable IaC, CI/CD pipelines, and hardened Linux configurations.</li>
+        <li>Prefer delivery that is measurable: faster deployments, clearer observability, and better day-2 operations.</li>
       </ul>
     </div>
     <div class="about-metrics">
       <div class="about-metric">
         <div class="about-metric-key">Core Focus</div>
-        <div class="about-metric-val">Cloud Infrastructure, DevOps Automation, Linux Operations, and SOC Engineering</div>
+        <div class="about-metric-val">Cloud Infrastructure, DevOps Automation, and Linux Operations</div>
       </div>
       <div class="about-metric">
         <div class="about-metric-key">Working Style</div>
@@ -1777,13 +1722,6 @@
       <div class="skill-category">Linux Administration</div>
       <div class="skill-tags">
         <span class="skill-tag">Ubuntu</span><span class="skill-tag">SSH Hardening</span><span class="skill-tag">Nginx</span><span class="skill-tag">Apache</span><span class="skill-tag">Firewall</span><span class="skill-tag">TLS/SSL</span><span class="skill-tag">VMware</span><span class="skill-tag">HA Setup</span>
-      </div>
-    </div>
-    <div class="skill-card">
-      <div class="skill-icon">🛡</div>
-      <div class="skill-category">SOC &amp; SIEM</div>
-      <div class="skill-tags">
-        <span class="skill-tag">Microsoft Sentinel</span><span class="skill-tag">SolarWinds SEM</span><span class="skill-tag">Log Onboarding</span><span class="skill-tag">Alert Tuning</span><span class="skill-tag">Incident Triage</span><span class="skill-tag">Runbooks</span><span class="skill-tag">SIEM Migration</span>
       </div>
     </div>
     <div class="skill-card">
@@ -1846,25 +1784,6 @@
     <h2 class="section-title">Work <em>Experience</em></h2>
   </div>
   <div class="timeline">
-    <div class="timeline-item">
-      <div class="exp-header">
-        <div class="exp-title">SOC Engineer</div>
-        <div class="exp-company">Habilesec</div>
-        <div class="exp-period">2025 — Present</div>
-        <span class="exp-type">Active</span>
-      </div>
-      <ul class="exp-bullets">
-        <li>Supported SOC onboarding and SIEM integration collecting logs from <strong>~500 workstations, servers</strong>, and network/security devices ensuring parsing, timestamps, and completeness.</li>
-        <li>Built and standardized log onboarding templates covering source type, facility/severity, event categories, retention, and validation checklists.</li>
-        <li>Created and tuned alert rules/use-cases for brute force, suspicious logins, privilege escalation, malware/IOC matches, and lateral movement signals.</li>
-        <li>Developed incident triage workflow including severity classification, escalation matrix, evidence collection, and containment recommendations.</li>
-        <li>Integrated SIEM alerts with email/Teams/Slack and ticketing tools for traceable incident tracking.</li>
-        <li>Delivered SOC documentation: runbooks/playbooks, SOPs, onboarding guides, and KT sessions for analysts.</li>
-      </ul>
-      <div style="margin-top:16px;">
-        <span class="exp-tag">Microsoft Sentinel</span><span class="exp-tag">SolarWinds SEM</span><span class="exp-tag">SIEM</span><span class="exp-tag">Incident Response</span><span class="exp-tag">Log Management</span>
-      </div>
-    </div>
     <div class="timeline-item">
       <div class="exp-header">
         <div class="exp-title">DevOps, Multi-Cloud &amp; Linux Engineer</div>
@@ -1936,37 +1855,6 @@
   <div class="section-header">
     <div class="section-label">Portfolio</div>
     <h2 class="section-title">Featured <em>Projects</em></h2>
-  </div>
-  <div class="siem-showcase">
-    <div class="project-category">Current Active Project</div>
-    <div class="project-title" style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;margin-bottom:12px;">SolarWinds SEM → Microsoft Sentinel SIEM Migration</div>
-    <div class="project-desc" style="max-width:700px;">
-      Led end-to-end SIEM migration covering discovery, target architecture, log source onboarding,
-      detection use-case rebuild, dashboards, alert routing, and go-live cutover.
-      Standardized log parsing/normalization, improved alert fidelity, and established operational runbooks for SOC monitoring.
-    </div>
-    <div class="siem-flow">
-      <div class="siem-node from">
-        <div class="siem-node-label">Legacy SIEM</div>
-        <div class="siem-node-name">SolarWinds SEM</div>
-      </div>
-      <div class="siem-arrow">→→→</div>
-      <div class="siem-node" style="border-color:rgba(0,229,255,0.19);min-width:120px;">
-        <div class="siem-node-label">Process</div>
-        <div class="siem-node-name" style="color:var(--cyan);font-size:0.8rem;">Migration<br>Pipeline</div>
-      </div>
-      <div class="siem-arrow">→→→</div>
-      <div class="siem-node to">
-        <div class="siem-node-label">Target SIEM</div>
-        <div class="siem-node-name">Microsoft Sentinel</div>
-      </div>
-    </div>
-    <div class="siem-metrics">
-      <div class="siem-metric"><div class="siem-metric-val">~500</div><div class="siem-metric-key">Endpoints Integrated</div></div>
-      <div class="siem-metric"><div class="siem-metric-val">↓</div><div class="siem-metric-key">False Positives Reduced</div></div>
-      <div class="siem-metric"><div class="siem-metric-val">100%</div><div class="siem-metric-key">Log Validation</div></div>
-      <div class="siem-metric"><div class="siem-metric-val">E2E</div><div class="siem-metric-key">Migration Led</div></div>
-    </div>
   </div>
   <div class="projects-grid" style="margin-top:2px;">
     <div class="project-card">
@@ -2101,7 +1989,7 @@
     <div>
       <div class="contact-card">
         <h3>Open to Opportunities</h3>
-        <p>Actively seeking roles in Multi-Cloud Engineering, DevOps, Linux Administration, and SOC Operations. Available for full-time, contract, or freelance engagements.</p>
+        <p>Actively seeking roles in Multi-Cloud Engineering, DevOps, and Linux Administration. Available for full-time, contract, or freelance engagements.</p>
         <div class="status-grid">
           <div class="status-item"><div class="status-key">Status</div><div class="status-val">Available</div></div>
           <div class="status-item"><div class="status-key">Type</div><div class="status-val">Full-time / Freelance</div></div>
@@ -2115,7 +2003,7 @@
 
 <footer>
   <div class="footer-copy">© 2026 <span>Sudarsan Palaniappan</span>. All rights reserved.</div>
-  <div>Multi-Cloud · DevOps · Linux · SOC</div>
+  <div>Multi-Cloud · DevOps · Linux · Cybersecurity</div>
   <div class="footer-links">
     <a href="mailto:sudarsanjuhi@gmail.com">Email</a>
     <a href="https://linkedin.com/in/sudarsanpalaniappan" target="_blank" rel="noreferrer">LinkedIn</a>
@@ -2440,8 +2328,7 @@
   const heroPhrases = [
     'Cloud Architecture & DevOps Automation',
     'Linux Infrastructure & Platform Reliability',
-    'SOC Engineering & SIEM Operations',
-    'Cybersecurity Monitoring & Incident Response',
+    'Cybersecurity & System Hardening',
     'Multi-Cloud Deployments Across AWS, Azure, and GCP'
   ];
   let phraseIndex = 0;
