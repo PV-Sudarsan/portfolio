@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Important Docker Steps to Learn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a, #2563eb);
+      color: #ffffff;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 38px;
+      letter-spacing: 0.5px;
+    }
+
+    header p {
+      margin-top: 12px;
+      font-size: 18px;
+      color: #dbeafe;
+    }
+
+    nav {
+      background: #ffffff;
+      padding: 15px 20px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      text-align: center;
+    }
+
+    nav a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+      font-size: 14px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e5e7eb;
+    }
+
+    h2 {
+      color: #0f172a;
+      border-left: 5px solid #2563eb;
+      padding-left: 12px;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: #1e40af;
+      margin-top: 25px;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .flow span {
+      background: #dbeafe;
+      color: #1e3a8a;
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: bold;
+    }
+
+    .arrow {
+      color: #64748b;
+      font-weight: bold;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 15px;
+      border-left: 5px solid #38bdf8;
+    }
+
+    code {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border-left: 5px solid #f97316;
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .success {
+      background: #ecfdf5;
+      border-left: 5px solid #10b981;
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .danger {
+      background: #fef2f2;
+      border-left: 5px solid #ef4444;
+      padding: 16px 18px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      padding: 14px;
+      border: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      background: #1e40af;
+      color: #ffffff;
+    }
+
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    ol li,
+    ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      color: #64748b;
+      padding: 30px 20px;
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #075985;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 28px;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 6px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .flow {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .arrow {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Important Docker Steps to Learn</h1>
+    <p>A beginner-friendly Docker learning guide with commands, examples, and safety cautions.</p>
+  </header>
+
+  <nav>
+    <a href="#installation">Installation</a>
+    <a href="#flow">Docker Flow</a>
+    <a href="#commands">Commands</a>
+    <a href="#dockerfile">Dockerfile</a>
+    <a href="#compose">Compose</a>
+    <a href="#cautions">Cautions</a>
+    <a href="#learning">Learning Order</a>
+    <a href="#practice">Practice</a>
+  </nav>
+
+  <main class="container">
+
+    <section class="card" id="installation">
+      <span class="tag">Step 1</span>
+      <h2>Check Docker Installation</h2>
+      <p>Use the below commands to verify Docker is installed and running properly.</p>
+      <pre><code>docker --version
+docker info</code></pre>
+    </section>
+
+    <section class="card" id="flow">
+      <span class="tag">Step 2</span>
+      <h2>Basic Docker Flow</h2>
+      <p>Docker works in this simple flow:</p>
+
+      <div class="flow">
+        <span>Image</span>
+        <div class="arrow">→</div>
+        <span>Container</span>
+        <div class="arrow">→</div>
+        <span>Logs / Exec</span>
+        <div class="arrow">→</div>
+        <span>Stop</span>
+        <div class="arrow">→</div>
+        <span>Remove</span>
+      </div>
+
+      <h3>Example with Nginx</h3>
+      <pre><code>docker pull nginx
+docker run -d --name my-nginx -p 8080:80 nginx
+docker ps
+docker logs my-nginx
+docker exec -it my-nginx bash
+docker stop my-nginx
+docker rm my-nginx</code></pre>
+
+      <div class="success">
+        <strong>Open in browser:</strong>
+        <br />
+        <code>http://localhost:8080</code>
+      </div>
+    </section>
+
+    <section class="card" id="commands">
+      <span class="tag">Must Know</span>
+      <h2>Must-Know Docker Commands</h2>
+
+      <h3>Container Commands</h3>
+      <pre><code>docker ps
+docker ps -a
+docker start container_name
+docker stop container_name
+docker restart container_name
+docker rm container_name
+docker rm -f container_name</code></pre>
+
+      <h3>Image Commands</h3>
+      <pre><code>docker images
+docker pull ubuntu
+docker rmi image_name</code></pre>
+
+      <h3>Logs and Troubleshooting</h3>
+      <pre><code>docker logs container_name
+docker logs -f container_name
+docker inspect container_name
+docker stats</code></pre>
+
+      <h3>Go Inside a Container</h3>
+      <pre><code>docker exec -it container_name bash</code></pre>
+
+      <p>If <code>bash</code> is not available, use:</p>
+      <pre><code>docker exec -it container_name sh</code></pre>
+    </section>
+
+    <section class="card" id="dockerfile">
+      <span class="tag">Build Images</span>
+      <h2>Dockerfile Basic Example</h2>
+      <p>Create a file named <strong>Dockerfile</strong>.</p>
+
+      <pre><code>FROM nginx:latest
+COPY . /usr/share/nginx/html
+EXPOSE 80</code></pre>
+
+      <h3>Build Image</h3>
+      <pre><code>docker build -t my-website .</code></pre>
+
+      <h3>Run Container</h3>
+      <pre><code>docker run -d --name website -p 8080:80 my-website</code></pre>
+    </section>
+
+    <section class="card" id="compose">
+      <span class="tag">Multi Container</span>
+      <h2>Docker Compose Basic Example</h2>
+      <p>Create a file named <strong>docker-compose.yml</strong>.</p>
+
+      <pre><code>services:
+  web:
+    image: nginx
+    container_name: nginx-web
+    ports:
+      - "8080:80"</code></pre>
+
+      <h3>Run</h3>
+      <pre><code>docker compose up -d</code></pre>
+
+      <h3>Stop</h3>
+      <pre><code>docker compose down</code></pre>
+
+      <h3>View Logs</h3>
+      <pre><code>docker compose logs -f</code></pre>
+    </section>
+
+    <section class="card" id="cautions">
+      <span class="tag">Important</span>
+      <h2>Very Important Docker Cautions</h2>
+
+      <h3>1. Be Careful with Delete Commands</h3>
+      <div class="danger">
+        These commands remove all containers or images. Use only when you are sure.
+      </div>
+
+      <p>This removes all containers:</p>
+      <pre><code>docker rm -f $(docker ps -aq)</code></pre>
+
+      <p>This removes all images:</p>
+      <pre><code>docker rmi -f $(docker images -aq)</code></pre>
+
+      <h3>2. Do Not Store Passwords Inside Dockerfile</h3>
+      <p>Avoid this:</p>
+      <pre><code>ENV DB_PASSWORD=mysecretpassword</code></pre>
+
+      <p>Better use environment variables:</p>
+      <pre><code>docker run -e DB_PASSWORD="yourpassword" app-image</code></pre>
+
+      <div class="warning">
+        For production, use AWS Secrets Manager, Azure Key Vault, Docker Secrets, or another secure secret management service.
+      </div>
+
+      <h3>3. Do Not Run Containers as Root in Production</h3>
+      <pre><code>RUN adduser appuser
+USER appuser</code></pre>
+
+      <h3>4. Always Use Specific Image Versions</h3>
+      <p>Avoid:</p>
+      <pre><code>FROM node:latest</code></pre>
+
+      <p>Better:</p>
+      <pre><code>FROM node:20-alpine</code></pre>
+
+      <div class="warning">
+        The <code>latest</code> tag can change anytime and may break your application.
+      </div>
+
+      <h3>5. Be Careful with Ports</h3>
+      <pre><code>docker run -p 8080:80 nginx</code></pre>
+
+      <table>
+        <tr>
+          <th>Part</th>
+          <th>Meaning</th>
+        </tr>
+        <tr>
+          <td>8080</td>
+          <td>Host machine port</td>
+        </tr>
+        <tr>
+          <td>80</td>
+          <td>Container port</td>
+        </tr>
+      </table>
+
+      <div class="danger">
+        Do not expose database ports publicly unless required.
+      </div>
+
+      <h3>6. Use Volumes for Important Data</h3>
+      <p>Without a volume, data may be lost when the container is removed.</p>
+
+      <pre><code>docker volume create mysql_data
+docker run -d \
+  --name mysql \
+  -e MYSQL_ROOT_PASSWORD=root123 \
+  -v mysql_data:/var/lib/mysql \
+  mysql:8</code></pre>
+
+      <h3>7. Clean Unused Docker Data Safely</h3>
+      <p>Safe cleanup:</p>
+      <pre><code>docker system prune</code></pre>
+
+      <p>More aggressive cleanup:</p>
+      <pre><code>docker system prune -a</code></pre>
+
+      <div class="danger">
+        Be very careful: <code>docker system prune -a</code> removes unused images also.
+      </div>
+    </section>
+
+    <section class="card" id="learning">
+      <span class="tag">Roadmap</span>
+      <h2>Best Learning Order</h2>
+      <ol>
+        <li>Docker basics: image, container, volume, and network</li>
+        <li>Run simple containers like Nginx, Ubuntu, and MySQL</li>
+        <li>Learn Dockerfile</li>
+        <li>Learn Docker Compose</li>
+        <li>Learn volumes and networking</li>
+        <li>Learn logs, debugging, and troubleshooting</li>
+        <li>Learn Docker security best practices</li>
+        <li>Learn deployment with AWS ECS, EKS, or Kubernetes</li>
+      </ol>
+    </section>
+
+    <section class="card" id="practice">
+      <span class="tag">Practice</span>
+      <h2>Most Useful Practice Commands</h2>
+      <pre><code>docker run hello-world
+docker run -it ubuntu bash
+docker run -d --name web -p 8080:80 nginx
+docker logs web
+docker exec -it web bash
+docker stop web
+docker rm web</code></pre>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Docker Learning Guide | Created for quick revision and practical learning</p>
+  </footer>
+</body>
+</html>
