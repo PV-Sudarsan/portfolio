@@ -1,0 +1,22 @@
+{
+  "fps": 24,
+  "width": 960,
+  "height": 540,
+  "clips": [
+    {
+      "file": "clip_1.mp4",
+      "start": 0,
+      "duration": 6
+    },
+    {
+      "file": "clip_2.mp4",
+      "start": 6,
+      "duration": 6
+    }
+  ],
+  "audio": "noisy_audio.wav",
+  "audio_effect": "FFT noise reduction",
+  "transitions": "0.5 second fade in/out per clip",
+  "captions": "captions.srt",
+  "note": "Timeline recipe; not an OpenShot .osp file."
+}

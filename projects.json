@@ -1,0 +1,67 @@
+[
+  {
+    "number": 1,
+    "folder": "01_Image_Selection_Transforms",
+    "title": "Image Selection Transforms"
+  },
+  {
+    "number": 2,
+    "folder": "02_Logo_and_Banner",
+    "title": "Logo and Banner"
+  },
+  {
+    "number": 3,
+    "folder": "03_Audio_Mixing_Effects",
+    "title": "Audio Mixing Effects"
+  },
+  {
+    "number": 4,
+    "folder": "04_Audio_MP3_Compression",
+    "title": "Audio MP3 Compression"
+  },
+  {
+    "number": 5,
+    "folder": "05_Video_Mixing_Captions",
+    "title": "Video Mixing Captions"
+  },
+  {
+    "number": 6,
+    "folder": "06_Video_Format_Compression",
+    "title": "Video Format Compression"
+  },
+  {
+    "number": 7,
+    "folder": "07_Homepage_Design",
+    "title": "Homepage Design"
+  },
+  {
+    "number": 8,
+    "folder": "08_Responsive_Search_Navigation",
+    "title": "Responsive Search Navigation"
+  },
+  {
+    "number": 9,
+    "folder": "09_2D_Sprite_Animation",
+    "title": "2D Sprite Animation"
+  },
+  {
+    "number": 10,
+    "folder": "10_3D_Keyframes_and_Mobile_UI",
+    "title": "3D Keyframes and Mobile UI"
+  },
+  {
+    "number": 11,
+    "folder": "11_Screen_Recording_Lesson",
+    "title": "Screen Recording Lesson"
+  },
+  {
+    "number": 12,
+    "folder": "12_E_Learning_Module",
+    "title": "E Learning Module"
+  },
+  {
+    "number": 13,
+    "folder": "13_VR_and_AR",
+    "title": "VR and AR"
+  }
+]

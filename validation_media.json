@@ -1,0 +1,110 @@
+[
+  {
+    "file": "05_Video_Mixing_Captions/mix_without_captions.mp4",
+    "duration": "12.000000",
+    "size": "207934",
+    "decode": "passed"
+  },
+  {
+    "file": "05_Video_Mixing_Captions/clip_2.mp4",
+    "duration": "6.000000",
+    "size": "19384",
+    "decode": "passed"
+  },
+  {
+    "file": "05_Video_Mixing_Captions/clip_1.mp4",
+    "duration": "6.000000",
+    "size": "24811",
+    "decode": "passed"
+  },
+  {
+    "file": "05_Video_Mixing_Captions/cleaned_audio.wav",
+    "duration": "12.000000",
+    "size": "1058478",
+    "decode": "passed"
+  },
+  {
+    "file": "05_Video_Mixing_Captions/noisy_audio.wav",
+    "duration": "12.000000",
+    "size": "1058444",
+    "decode": "passed"
+  },
+  {
+    "file": "05_Video_Mixing_Captions/final_captioned.mp4",
+    "duration": "12.000000",
+    "size": "260469",
+    "decode": "passed"
+  },
+  {
+    "file": "06_Video_Format_Compression/intermediate.avi",
+    "duration": "12.000000",
+    "size": "2739018",
+    "decode": "passed"
+  },
+  {
+    "file": "06_Video_Format_Compression/source.mp4",
+    "duration": "12.000000",
+    "size": "260469",
+    "decode": "passed"
+  },
+  {
+    "file": "06_Video_Format_Compression/converted.webm",
+    "duration": "12.012000",
+    "size": "210574",
+    "decode": "passed"
+  },
+  {
+    "file": "06_Video_Format_Compression/compressed.mp4",
+    "duration": "12.003991",
+    "size": "156837",
+    "decode": "passed"
+  },
+  {
+    "file": "09_2D_Sprite_Animation/sprite_preview.mp4",
+    "duration": "4.000000",
+    "size": "10749",
+    "decode": "passed"
+  },
+  {
+    "file": "11_Screen_Recording_Lesson/edited_lesson.mp4",
+    "duration": "8.760000",
+    "size": "96178",
+    "decode": "passed"
+  },
+  {
+    "file": "11_Screen_Recording_Lesson/raw_recording.webm",
+    "duration": "9.080000",
+    "size": "390098",
+    "decode": "passed"
+  },
+  {
+    "file": "03_Audio_Mixing_Effects/mixed_fades.wav",
+    "duration": "12.000000",
+    "size": "1058444",
+    "decode": "passed"
+  },
+  {
+    "file": "03_Audio_Mixing_Effects/melody.wav",
+    "duration": "12.000000",
+    "size": "1058444",
+    "decode": "passed"
+  },
+  {
+    "file": "03_Audio_Mixing_Effects/bass_and_beat.wav",
+    "duration": "12.000000",
+    "size": "1058444",
+    "decode": "passed"
+  },
+  {
+    "file": "04_Audio_MP3_Compression/compressed_128k.mp3",
+    "duration": "12.042449",
+    "size": "193141",
+    "decode": "passed"
+  },
+  {
+    "file": "04_Audio_MP3_Compression/source.wav",
+    "duration": "12.000000",
+    "size": "1058444",
+    "decode": "passed"
+  }
+]

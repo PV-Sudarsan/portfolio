@@ -1,0 +1,53 @@
+[
+  {
+    "test": "07_Homepage_Design mobile overflow",
+    "pass": true
+  },
+  {
+    "test": "07_Homepage_Design audio search",
+    "pass": true
+  },
+  {
+    "test": "07_Homepage_Design empty search",
+    "pass": true
+  },
+  {
+    "test": "08_Responsive_Search_Navigation mobile overflow",
+    "pass": true
+  },
+  {
+    "test": "08_Responsive_Search_Navigation audio search",
+    "pass": true
+  },
+  {
+    "test": "08_Responsive_Search_Navigation empty search",
+    "pass": true
+  },
+  {
+    "test": "Quiz wrong answer feedback",
+    "pass": true
+  },
+  {
+    "test": "Quiz correct answer feedback",
+    "pass": true
+  },
+  {
+    "test": "Sprite pause button",
+    "pass": true
+  },
+  {
+    "test": "Mobile animation action",
+    "pass": true
+  },
+  {
+    "test": "XR desktop WebGL canvas",
+    "pass": null,
+    "status": "not tested",
+    "note": "GPU unavailable; immersive and GPU rendering require device validation"
+  },
+  {
+    "test": "Browser JavaScript errors",
+    "pass": true,
+    "errors": []
+  }
+]
